@@ -41,6 +41,175 @@ body:before{content:"";position:fixed;inset:-35%;pointer-events:none;z-index:0;b
 @media (max-width:760px){.hero-signature{font-size:12px}.luxury-grid,.contact-cards{grid-template-columns:1fr}.luxury-card{min-height:auto}.premium-showcase-card{padding:22px;border-radius:26px}.floating-instagram{right:84px;bottom:38px}.floating-tiktok{right:136px;bottom:38px}.floating-quote{bottom:154px}.floating-ai{bottom:94px}.top-links a[href*="instagram"],.top-links a[href*="tiktok"]{display:block}.page-loader strong{font-size:44px}}
 @media (prefers-reduced-motion:reduce){body:before,.page-loader,.loader-ring,.hero h1 .word,.product-card,.brand-group,.pulse-ring,.modal-product .modal-img:after{animation:none!important}.hero h1 .word{opacity:1;transform:none}}
 
+
+/* ===== W'Fraganc Fix Responsive + Legibilidad + Rendimiento =====
+   Corrección aplicada: el panel de filtros ya no deja ver/mezclar productos por debajo,
+   mejora contraste en buscador/selects y optimiza la experiencia móvil. */
+:root{
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Más contraste en campos y paneles */
+input::placeholder,
+textarea::placeholder{color:rgba(255,248,237,.58);opacity:1}
+:root[data-theme="light"] input::placeholder,
+:root[data-theme="light"] textarea::placeholder{color:rgba(23,17,11,.55)}
+select option{background:#17130f;color:#fff8ed}
+:root[data-theme="light"] select option{background:#fffaf2;color:#17110b}
+
+/* Panel de filtros: se vuelve sólido al quedar sticky para que no se monten visualmente los productos */
+.filters-panel{
+  position:sticky;
+  top:92px;
+  z-index:95;
+  overflow:visible;
+  margin-bottom:38px;
+  background:
+    radial-gradient(circle at 12% 0%,rgba(244,217,149,.14),transparent 32%),
+    linear-gradient(145deg,rgba(23,19,15,.96),rgba(16,13,10,.94));
+  border-color:rgba(244,217,149,.28);
+  box-shadow:0 22px 70px rgba(0,0,0,.42),0 0 0 1px rgba(244,217,149,.08) inset;
+  backdrop-filter:blur(28px) saturate(1.15);
+  -webkit-backdrop-filter:blur(28px) saturate(1.15);
+}
+:root[data-theme="light"] .filters-panel{
+  background:
+    radial-gradient(circle at 12% 0%,rgba(213,173,98,.16),transparent 32%),
+    linear-gradient(145deg,rgba(255,250,242,.98),rgba(246,237,224,.96));
+  box-shadow:0 22px 60px rgba(82,55,12,.16),0 0 0 1px rgba(123,88,30,.08) inset;
+}
+.filters-panel::after{
+  content:"";
+  position:absolute;
+  left:18px;
+  right:18px;
+  bottom:-18px;
+  height:18px;
+  pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,0,0,.22),transparent);
+  filter:blur(8px);
+}
+.main-search{
+  background:rgba(12,10,8,.62);
+  border-color:rgba(244,217,149,.28);
+}
+:root[data-theme="light"] .main-search{background:rgba(255,255,255,.76)}
+.filter-grid select,
+.form-grid select,
+.form-grid textarea,
+.brand-tools input,
+.ai-chat-form input{
+  min-height:44px;
+  color:var(--text);
+}
+.pill-toggle,.btn-mini{min-height:40px}
+.catalog-toolbar,.catalog-groups,.no-results{position:relative;z-index:2}
+
+/* Grillas fluidas: evitan columnas demasiado apretadas en tablets y pantallas pequeñas */
+.product-grid{
+  grid-template-columns:repeat(auto-fit,minmax(235px,1fr));
+  align-items:stretch;
+}
+.product-card{
+  content-visibility:auto;
+  contain-intrinsic-size:520px;
+  will-change:transform;
+  backface-visibility:hidden;
+}
+.brand-group{content-visibility:auto;contain-intrinsic-size:900px}
+.card-media img{user-select:none;-webkit-user-drag:none}
+
+/* Menú superior y secciones con separación más estable */
+.topbar{z-index:140}
+.catalog-section{scroll-margin-top:112px}
+#catalogo,#asesor,#destacados,#comparador,#contacto{scroll-margin-top:112px}
+
+/* Botones flotantes: mejor jerarquía y menos invasivos */
+.floating-ai,.floating-quote,.floating-whatsapp,.floating-social,.back-top{touch-action:manipulation}
+.floating-quote{min-width:58px}
+
+@media (max-width:1050px){
+  .filters-panel{top:82px;padding:16px;margin-bottom:28px}
+  .filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .product-grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+  .catalog-section{padding-top:56px}
+}
+
+@media (max-width:760px){
+  .cursor-glow,.noise,body::before{display:none!important}
+  .container{width:min(var(--container),calc(100% - 22px))}
+  .announcement{padding:8px 10px;font-size:10px;line-height:1.35}
+  .nav-inner{height:62px;gap:10px}
+  .logo-mark{width:42px;height:42px;border-radius:15px}
+  .brand-logo strong{font-size:17px}.brand-logo small{font-size:11px}
+  .top-links{top:72px;max-height:calc(100vh - 86px);overflow:auto;z-index:160}
+  .top-links a,.top-links button{min-height:44px;align-items:center}
+
+  .hero{padding:38px 0 28px;gap:20px}
+  .hero h1{font-size:clamp(34px,11vw,46px);line-height:1.04;letter-spacing:-.04em}
+  .hero-text{font-size:15px;line-height:1.62;margin:18px 0}
+  .hero-signature{gap:7px;margin-bottom:16px}
+  .hero-actions,.contact-actions{display:grid;grid-template-columns:1fr;gap:10px}
+  .trust-strip{gap:8px;margin-top:18px}.trust-strip span{font-size:12px;padding:8px 10px}
+
+  .hero-search,.main-search{display:grid;grid-template-columns:24px 1fr 42px;border-radius:22px;padding:9px 10px;gap:8px}
+  .hero-search .btn{grid-column:1/-1;width:100%;min-height:44px}
+  .main-search .icon-button{grid-column:auto;width:42px;height:42px}
+  .search-suggestions{position:fixed;left:12px;right:12px;top:auto;bottom:calc(16px + var(--safe-bottom));max-height:52vh;overflow:auto;z-index:240}
+
+  .filters-panel{
+    position:relative;
+    top:auto;
+    z-index:15;
+    padding:14px;
+    margin-bottom:22px;
+    border-radius:22px;
+    background:linear-gradient(145deg,rgba(23,19,15,.98),rgba(16,13,10,.96));
+  }
+  :root[data-theme="light"] .filters-panel{background:linear-gradient(145deg,rgba(255,250,242,.99),rgba(246,237,224,.98))}
+  .filters-panel::after{display:none}
+  .filter-grid{grid-template-columns:1fr;gap:10px}
+  .filter-grid label{font-size:12px}
+  .filter-actions{display:grid;grid-template-columns:1fr;gap:10px}
+  .active-filters{margin-top:10px}
+  .active-filter{width:100%;justify-content:center}
+
+  .catalog-toolbar{gap:12px;margin:12px 0 18px}
+  .toolbar-actions{display:grid;grid-template-columns:1fr 1fr;width:100%}
+  .toolbar-actions .btn{width:100%}
+  .brand-group{padding-top:20px}
+  .brand-group h3{font-size:30px}
+  .gender-section{margin:18px 0}
+  .product-grid{grid-template-columns:1fr;gap:16px}
+  .product-card{border-radius:22px;contain-intrinsic-size:500px}
+  .card-media{height:224px;margin:10px 10px 0;border-radius:20px}
+  .card-media img{max-height:195px}
+  .card-body{padding:16px 16px 8px}.card-desc{min-height:auto}
+  .card-actions{padding:0 16px 12px}.card-extra{padding:0 16px 16px}
+
+  .luxury-lab,.brand-nav-wrap,.catalog-section,.contact-section{padding:48px 0}
+  .section-title{margin-bottom:22px}.section-title h2{font-size:clamp(31px,9vw,38px)}
+  .advisor-section{padding:54px 0}.advisor-layout{gap:18px}
+  .advisor-form,.advisor-results{padding:16px;border-radius:22px}
+  .form-grid{grid-template-columns:1fr;gap:11px}
+  .compare-card{padding:22px}
+
+  .floating-social{display:none!important}
+  .floating-whatsapp{right:14px;bottom:calc(18px + var(--safe-bottom));width:54px;height:54px;font-size:22px}
+  .floating-quote{right:14px;bottom:calc(82px + var(--safe-bottom));height:48px;min-width:54px;padding:0 13px}
+  .floating-ai{right:14px;bottom:calc(140px + var(--safe-bottom));width:52px;height:52px}
+  .back-top{left:14px;bottom:calc(18px + var(--safe-bottom));width:44px;height:44px}
+  .ai-chat{left:10px;right:10px;bottom:calc(86px + var(--safe-bottom));width:auto;height:min(520px,calc(100vh - 110px));max-height:calc(100vh - 110px);border-radius:22px}
+  .side-drawer{width:min(420px,96vw);padding:18px}
+  .modal-card{width:calc(100vw - 20px);border-radius:24px}.modal-product .modal-img{min-height:260px}
+}
+
+@media (max-width:380px){
+  .hero h1{font-size:33px}.btn,.nav-cta{padding:12px 15px}
+  .card-actions{grid-template-columns:1fr}.card-extra{gap:10px;flex-wrap:wrap}
+  .toolbar-actions{grid-template-columns:1fr}.floating-ai{bottom:calc(136px + var(--safe-bottom))}
+}
+
 </style>
 </head>
 <body>
@@ -855,6 +1024,60 @@ window.PRODUCTS = [{"id": "p259", "pagina": 259, "nombre": "AHLI Corvus", "marca
     addQuickContactPulse();
     window.addEventListener('resize', magneticUpgrade);
   }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+
+</script>
+<script>
+
+/* ===== W'Fraganc Mobile/Performance Runtime Fixes ===== */
+(() => {
+  const $ = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+
+  function optimizeImages(){
+    $$('img').forEach(img => {
+      if (!img.hasAttribute('loading')) img.loading = 'lazy';
+      img.decoding = 'async';
+      img.draggable = false;
+      if (img.closest('.hero-product')) img.loading = 'eager';
+      if (!img.alt && img.closest('.product-card')) {
+        const card = img.closest('.product-card');
+        const name = card?.querySelector('h3')?.textContent?.trim();
+        const brand = card?.querySelector('.card-brand')?.textContent?.trim();
+        if (name) img.alt = brand ? `${name} de ${brand}` : name;
+      }
+    });
+  }
+
+  function closeMobileMenuOnNavigate(){
+    const menu = $('#topLinks');
+    const toggle = $('#menuToggle');
+    if (!menu || !toggle) return;
+    $$('#topLinks a').forEach(link => {
+      link.addEventListener('click', () => {
+        menu.classList.remove('open');
+        toggle.setAttribute('aria-expanded','false');
+      });
+    });
+  }
+
+  function keepCatalogReadable(){
+    const panel = $('#filtersPanel');
+    if (!panel) return;
+    const set = () => document.documentElement.style.setProperty('--wf-filter-height', `${panel.offsetHeight}px`);
+    set();
+    window.addEventListener('resize', set, {passive:true});
+  }
+
+  function init(){
+    optimizeImages();
+    closeMobileMenuOnNavigate();
+    keepCatalogReadable();
+    const mo = new MutationObserver(() => requestAnimationFrame(optimizeImages));
+    mo.observe(document.body, {childList:true, subtree:true});
+  }
+
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
 
